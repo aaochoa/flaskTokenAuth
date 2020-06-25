@@ -10,12 +10,13 @@ import jwt
 import datetime
 from functools import wraps
 
-# Variables YAML
+# Variables YAML and setting up postgres URL
 conf = yaml.load(open('application.yml'), Loader=yaml.BaseLoader)
 POSTGRES_URL = conf['development']['host']
 POSTGRES_USER = conf['development']['user']
 POSTGRES_PW = conf['development']['password']
 POSTGRES_DB = conf['development']['database']
+DB_URL = 'postgresql+psycopg2://{user}:{pw}@{url}/{db}'.format(user=POSTGRES_USER,pw=POSTGRES_PW,url=POSTGRES_URL,db=POSTGRES_DB)
 
 # Init app
 app = Flask(__name__)
@@ -23,7 +24,6 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 app.config['SECRET_KEY'] = conf['general']['secret_key']
 
 # Database
-DB_URL = 'postgresql+psycopg2://{user}:{pw}@{url}/{db}'.format(user=POSTGRES_USER,pw=POSTGRES_PW,url=POSTGRES_URL,db=POSTGRES_DB)
 app.config['SQLALCHEMY_DATABASE_URI'] = DB_URL
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
