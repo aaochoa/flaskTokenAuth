@@ -12,6 +12,8 @@ flask-marshmallow = "*"
 marshmallow-sqlalchemy = "*"
 werkzeug = "*"
 pyjwt = "*"
+pyyaml = "*"
+psycopg2 = "*"
 
 [requires]
 python_version = "3.8"

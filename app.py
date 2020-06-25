@@ -1,6 +1,8 @@
 from flask import Flask, request, jsonify, make_response
 from flask_sqlalchemy import SQLAlchemy 
 from flask_marshmallow import Marshmallow 
+import yaml
+import psycopg2
 import os
 import uuid
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -8,15 +10,29 @@ import jwt
 import datetime
 from functools import wraps
 
+# Variables YAML
+conf = yaml.load(open('application.yml'), Loader=yaml.BaseLoader)
+POSTGRES_URL = conf['development']['host']
+POSTGRES_USER = conf['development']['user']
+POSTGRES_PW = conf['development']['password']
+POSTGRES_DB = conf['development']['database']
+
 # Init app
 app = Flask(__name__)
 basedir = os.path.abspath(os.path.dirname(__file__))
-app.config['SECRET_KEY'] = 'toodramaticallysecret'
+app.config['SECRET_KEY'] = conf['general']['secret_key']
+
 # Database
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'db.sqlite')
+DB_URL = 'postgresql+psycopg2://{user}:{pw}@{url}/{db}'.format(user=POSTGRES_USER,pw=POSTGRES_PW,url=POSTGRES_URL,db=POSTGRES_DB)
+app.config['SQLALCHEMY_DATABASE_URI'] = DB_URL
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+# SQLite database
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'db.sqlite')
+
 # Init db
 db = SQLAlchemy(app)
+
 # Init ma
 ma = Marshmallow(app)
 
