@@ -1,6 +1,6 @@
 # Flask API with user authentication and token use
 
-  Additionally it has another table to show and test logging permissions.
+  Additionally it has another table to show and test logging permissions. The API is working with PostgreSQL, also if you want to it works with SQLite.
 
 ## Initial set up
 
